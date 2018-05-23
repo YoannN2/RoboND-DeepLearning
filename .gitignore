@@ -102,4 +102,6 @@ ENV/
 .mypy_cache/
 
 RUNS/
-
+data/sample_evaluation_data/
+data/train/
+data/validation
