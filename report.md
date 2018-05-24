@@ -70,23 +70,32 @@ While testing different architectures a smaller epochs of 5 was used to test the
 
 To be completely honest, changing those parameters didn't change all that much, compared to the other parameters, which is why they were left to their default value, except the validation step which was set to 30 (from 50 by default) to reduce the amount of operations that needed to be done in each epochs that wasn't directly affecting the training while still retaining its role as a metrics for training the neural network.
 
-![overfitting?](docs\assets\training plot.png)
+![training plot](docs\assets\training plot.png)
 
-This is the training curves I got using those parameters for comparison, and the last loss values were: train_loss: 0.0126, val_loss: 0.0272, refer to the .ipynb for more info.
+This is the training curves I got using those parameters for comparison, and the last loss values were: train_loss: 0.0126, val_loss: 0.0272, refer to the .ipynb for the complete set of plot and losses.
+
+## 3. Fully Connected Layer vs 1x1 Convolution
+Fully connected layers are often used in CNN's final layers (i.e: LeNet, AlexNET) to make predictions based on the features extracted during the convolutions and maxpooling preceding it, it is where the high-level reasoning of the network happens. However when passing the output of a Convolution layer to a fully connected layer we need to flatten the output of the convolution layer to a 2D layer, therefore losing the spatial informations in the process. While fully connected layers are quite useful at image recognition and classification, they do present a problem when we need to retain the spatial informations of the network.
+
+We want our network to perform semantic segmentation on an image and output and image with each pixels being classified as either hero, non-hero or background, therefore losing spatial informations wouldn't allow us to perform such task. One way to circumvent this is to use 1x1 convolutions instead of fully connected layers.
+
+1x1 convolutions are simply convolutions with a stride and kernel size of 1 and 'SAME' padding. Since it still is a convolution, spatial data is retained, and it still is able to perform as the high-level reasoning layer of the network. So as Yann LeCun said:
+
+>In Convolutional Nets, there is no such thing as "fully-connected layers". There are only convolution layers with 1x1 convolution kernels and a full connection table. - [Yann LeCun](https://www.facebook.com/yann.lecun/posts/10152820758292143)
 
 
-## 3. Limitations of this NN and Dataset:
+## 4. Limitations of this NN and Dataset:
 This model would not be able to work with different subjects (dog, cat, car, etc.) as it has only learnt from images of humans. To make it able to segment out different subjects, the network would have to be trained using data that contains these subjects.
 
-## 4. Future enhancements:
-Current issues with the FCN:
-* It could be better tuned for sure, using an evolutionary algorithm for tuning the model would be a good experiment.
+## 5. Future enhancements:
+**Current issues with the FCN:**
 
+* It could be better tuned for sure, using an evolutionary algorithm for tuning the model would be a good experiment to try out, although it might be quite computationally expensive to train.
 
 * Data collection, during the training I gathered more data of the drone patrolling with the target in sight, but the quantity wasn't near enough to have a significant impact, so that would be a potential improvement to make.
 
 ![more data!](docs\assets\data_collection.jpg)
 
-Potential enhancements to make:
+**Potential enhancements to make:**
 * The drone's camera captures the depth, yet our network isn't using it.
 * The network can differentiate between non-hero and the hero but isn't able to differentiate non-heroes from each others, how can I alter the network for it to properly segment people and detect them as different entities? Using the techniques used in project 3 would be a good place to start.
